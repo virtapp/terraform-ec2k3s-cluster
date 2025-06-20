@@ -6,8 +6,8 @@
 
 🎯  Key Features
 ```
-✅ Launch EC2 Instance
-✅ K3S Dependencies Instalation 
+✅ Launch EC2 Instances
+✅ Install Dependencies
 ✅ Prepare Kubernetes Cluster
 ✅ Post-Configuration
 ```
