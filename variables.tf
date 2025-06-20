@@ -1,3 +1,4 @@
+
 variable "region" {
   default = "us-east-1"
 }
@@ -19,16 +20,13 @@ variable "worker_count" {
 }
 
 variable "ssh_allowed_cidr" {
-  description = "CIDR block allowed to access port 22"
-  default     = "0.0.0.0/0"
+  default = "0.0.0.0/0"
 }
 
 variable "security_group_name" {
-  description = "Name for the K3s security group"
-  default     = "k3s-cluster-sg"
+  default = "k3s-cluster-sg"
 }
 
 variable "security_group_description" {
-  description = "Description for the K3s security group"
-  default     = "Allow traffic for K3s cluster nodes"
+  default = "K3s cluster security group"
 }
