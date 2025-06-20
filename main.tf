@@ -100,6 +100,5 @@ resource "aws_instance" "k3s_nodes" {
       "bash /tmp/install-k3s.sh ${count.index} ${aws_instance.k3s_nodes[0].private_ip} ${var.master_count}"
     ]
   }
-}
 
 
