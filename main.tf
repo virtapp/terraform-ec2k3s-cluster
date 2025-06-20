@@ -1,3 +1,36 @@
+resource "aws_security_group" "k3s_sg" {
+  name        = var.security_group_name
+  description = var.security_group_description
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    description = "Allow SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.ssh_allowed_cidr]
+  }
+
+  ingress {
+    description = "K3s API (6443)"
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = var.security_group_name
+  }
+}
+
 resource "aws_instance" "k3s_nodes" {
   count         = var.master_count + var.worker_count
   ami           = var.ami_id
@@ -31,3 +64,5 @@ resource "aws_instance" "k3s_nodes" {
     ]
   }
 }
+
+
