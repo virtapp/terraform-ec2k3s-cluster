@@ -17,3 +17,18 @@ variable "master_count" {
 variable "worker_count" {
   default = 2
 }
+
+variable "ssh_allowed_cidr" {
+  description = "CIDR block allowed to access port 22"
+  default     = "0.0.0.0/0"
+}
+
+variable "security_group_name" {
+  description = "Name for the K3s security group"
+  default     = "k3s-cluster-sg"
+}
+
+variable "security_group_description" {
+  description = "Description for the K3s security group"
+  default     = "Allow traffic for K3s cluster nodes"
+}
