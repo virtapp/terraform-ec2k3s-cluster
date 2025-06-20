@@ -65,7 +65,7 @@ resource "aws_security_group" "k3s_sg" {
 
 resource "aws_key_pair" "generated_key" {
   key_name   = "ubuntu"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = file(var.ssh_public_key_path)
 }
 
 resource "aws_instance" "k3s_nodes" {
@@ -85,12 +85,17 @@ resource "aws_instance" "k3s_nodes" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("~/.ssh/id_rsa")
+    private_key = file(var.ssh_private_key_path)
     host        = self.public_ip
   }
 
   provisioner "file" {
-  source      = "~/.ssh/id_rsa"
+  source      = var.ssh_private_key_path
+  destination = "/home/ubuntu/.ssh/id_rsa"
+}
+
+  provisioner "file" {
+  source      = var.ssh_private_key_path
   destination = "/home/ubuntu/.ssh/id_rsa"
 }
   provisioner "file" {
