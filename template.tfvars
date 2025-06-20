@@ -1,5 +1,5 @@
 region         = "us-west-2"
-ami_id         = "mi-0345dd2cef523536e"
+ami_id         = "ami-0345dd2cef523536e"
 instance_type  = "t3.medium"
 master_count   = 3
 worker_count   = 2
