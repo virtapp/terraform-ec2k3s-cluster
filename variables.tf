@@ -30,3 +30,11 @@ variable "security_group_name" {
 variable "security_group_description" {
   default = "K3s cluster security group"
 }
+
+variable "ssh_public_key_path" {
+  default = "/home/ubuntu/.ssh/id_rsa.pub"
+}
+
+variable "ssh_private_key_path" {
+  default = "/home/ubuntu/.ssh/id_rsa"
+}
