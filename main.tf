@@ -1,3 +1,21 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~>5.0"
+    }
+ 
+  }
+}
+
+provider "aws" {
+  region = var.region
+}
+
+data "aws_vpc" "default" {
+  default = true
+}
+
 resource "aws_security_group" "k3s_sg" {
   name        = var.security_group_name
   description = var.security_group_description
