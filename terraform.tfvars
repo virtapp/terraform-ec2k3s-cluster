@@ -1,8 +1,8 @@
 region         = "us-east-1"
-# Ubuntu 22.04 LTS AMI (replace with a valid ID for your region)
-ami_id         = "ami-0fc5d935ebf8bc3bc"
-# Instance type suitable for K3s
+ami_id         = "mi-0345dd2cef523536e"
 instance_type  = "t3.medium"
-# Number of master (server) nodes
 master_count   = 3
 worker_count   = 2
+ssh_allowed_cidr = "0.0.0.0/0" # Replace with your IP
+security_group_name = "k3s-sg"
+security_group_description = "K3s cluster SG"
