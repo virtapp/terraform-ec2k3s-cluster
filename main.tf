@@ -53,6 +53,11 @@ resource "aws_security_group" "k3s_sg" {
   }
 }
 
+resource "aws_key_pair" "generated_key" {
+  key_name   = "ubuntu"
+  public_key = file("~/.ssh/id_rsa.pub")
+}
+
 resource "aws_instance" "k3s_nodes" {
   count         = var.master_count + var.worker_count
   ami           = var.ami_id
