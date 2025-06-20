@@ -4,7 +4,7 @@ terraform {
       source  = "hashicorp/aws"
       version = "~>5.0"
     }
- 
+
   }
 }
 
@@ -68,8 +68,8 @@ resource "aws_key_pair" "generated_key" {
   public_key = file(var.ssh_public_key_path)
 }
 
-resource "aws_instance" "k3s_nodes" {
-  count         = var.master_count + var.worker_count
+resource "aws_instance" "k3s_master" {
+  count         = var.master_count
   ami           = var.ami_id
   instance_type = var.instance_type
   key_name      = aws_key_pair.generated_key.key_name
@@ -78,8 +78,8 @@ resource "aws_instance" "k3s_nodes" {
   associate_public_ip_address = true
 
   tags = {
-    Name = count.index < var.master_count ? "k3s-master-${count.index}" : "k3s-worker-${count.index - var.master_count}"
-    Role = count.index < var.master_count ? "master" : "worker"
+    Name = "k3s-master-${count.index}"
+    Role = "master"
   }
 
   connection {
@@ -90,9 +90,9 @@ resource "aws_instance" "k3s_nodes" {
   }
 
   provisioner "file" {
-  source      = var.ssh_private_key_path
-  destination = "/home/ubuntu/.ssh/id_rsa"
-}
+    source      = var.ssh_private_key_path
+    destination = "/home/ubuntu/.ssh/id_rsa"
+  }
 
   provisioner "file" {
     source      = "install-k3s.sh"
@@ -100,11 +100,54 @@ resource "aws_instance" "k3s_nodes" {
   }
 
   provisioner "remote-exec" {
-  inline = [
-    "chmod 600 /home/ubuntu/.ssh/id_rsa",
-    "chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa",
-    "chmod +x /tmp/install-k3s.sh",
-    "bash /tmp/install-k3s.sh ${count.index} ${element(aws_instance.k3s_nodes.*.private_ip, 0)} ${var.master_count}"
-  ]
- }
-} # <-- ✅ This closing brace was missing
+    inline = [
+      "chmod 600 /home/ubuntu/.ssh/id_rsa",
+      "chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa",
+      "chmod +x /tmp/install-k3s.sh",
+      "bash /tmp/install-k3s.sh ${count.index} ${self.private_ip} ${var.master_count}"
+    ]
+  }
+}
+
+resource "aws_instance" "k3s_worker" {
+  count         = var.worker_count
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  key_name      = aws_key_pair.generated_key.key_name
+  subnet_id     = data.aws_subnet.default.id
+  vpc_security_group_ids = [aws_security_group.k3s_sg.id]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "k3s-worker-${count.index}"
+    Role = "worker"
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file(var.ssh_private_key_path)
+    host        = self.public_ip
+  }
+
+  provisioner "file" {
+    source      = var.ssh_private_key_path
+    destination = "/home/ubuntu/.ssh/id_rsa"
+  }
+
+  provisioner "file" {
+    source      = "install-k3s.sh"
+    destination = "/tmp/install-k3s.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 600 /home/ubuntu/.ssh/id_rsa",
+      "chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa",
+      "chmod +x /tmp/install-k3s.sh",
+      "bash /tmp/install-k3s.sh ${count.index} ${aws_instance.k3s_master[0].private_ip} ${var.master_count}"
+    ]
+  }
+
+  depends_on = [aws_instance.k3s_master]
+}
