@@ -1,4 +1,4 @@
-region         = "us-east-1"
+region         = "us-west-2"
 ami_id         = "mi-0345dd2cef523536e"
 instance_type  = "t3.medium"
 master_count   = 3
