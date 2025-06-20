@@ -106,6 +106,5 @@ resource "aws_instance" "k3s_nodes" {
     "chmod +x /tmp/install-k3s.sh",
     "bash /tmp/install-k3s.sh ${count.index} ${element(aws_instance.k3s_nodes.*.private_ip, 0)} ${var.master_count}"
   ]
-}
-
-
+ }
+} # <-- ✅ This closing brace was missing
