@@ -90,6 +90,10 @@ resource "aws_instance" "k3s_nodes" {
   }
 
   provisioner "file" {
+  source      = "~/.ssh/id_rsa"
+  destination = "/home/ubuntu/.ssh/id_rsa"
+}
+  provisioner "file" {
     source      = "install-k3s.sh"
     destination = "/tmp/install-k3s.sh"
   }
