@@ -12,12 +12,22 @@ provider "aws" {
   region = var.region
 }
 
-data "aws_subnet_ids" "default" {
-  vpc_id = data.aws_vpc.default.id
+# Default VPC
+data "aws_vpc" "default" {
+  default = true
 }
 
+# Subnets in the default VPC (fixed for AWS provider v5+)
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
+
+# Use the first subnet (can be randomized or made smarter)
 data "aws_subnet" "default" {
-  id = tolist(data.aws_subnet_ids.default.ids)[0]
+  id = tolist(data.aws_subnets.default.ids)[0]
 }
 
 resource "aws_security_group" "k3s_sg" {
