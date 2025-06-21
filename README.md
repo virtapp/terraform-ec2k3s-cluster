@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/8e999e58-2c60-4a83-9fac-dbff31803276)
+![image](https://github.com/user-attachments/assets/139ad7ff-f88a-46cf-ae46-8faf1db7921a)
+
 
 
 ## Terraform Provisioner | K3S Model  🚀🚀🚀
