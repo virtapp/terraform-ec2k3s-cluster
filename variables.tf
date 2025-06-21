@@ -19,6 +19,18 @@ variable "worker_count" {
   default = 2
 }
 
+variable "root_volume_size" {
+  type        = number
+  description = "Root volume size in GiB"
+  default     = 100
+}
+
+variable "root_volume_type" {
+  type        = string
+  description = "Type of root volume (e.g., gp3, gp2, io1)"
+  default     = "gp3"
+}
+
 variable "ssh_allowed_cidr" {
   default = "0.0.0.0/0"
 }
