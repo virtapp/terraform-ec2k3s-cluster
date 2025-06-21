@@ -116,7 +116,7 @@ resource "aws_instance" "k3s_worker" {
   key_name      = aws_key_pair.generated_key.key_name
   subnet_id     = data.aws_subnet.default.id
   vpc_security_group_ids = [aws_security_group.k3s_sg.id]
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   tags = {
     Name = "k3s-worker-${count.index}"
