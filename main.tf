@@ -77,6 +77,12 @@ resource "aws_instance" "k3s_master" {
   vpc_security_group_ids = [aws_security_group.k3s_sg.id]
   associate_public_ip_address = true
 
+  root_block_device {
+    volume_size = var.root_volume_size     # e.g., 30 (in GiB)
+    volume_type = var.root_volume_type     # e.g., "gp3"
+    delete_on_termination = true
+  }
+
   tags = {
     Name = "k3s-master-${count.index}"
     Role = "master"
