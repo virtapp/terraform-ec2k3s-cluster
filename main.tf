@@ -58,6 +58,14 @@ resource "aws_security_group" "k3s_sg" {
     cidr_blocks = [data.aws_vpc.default.cidr_block]
   }
 
+  ingress {
+    description = "K3s HTTS (443)"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.default.cidr_block]
+  }
+  
   egress {
     from_port   = 0
     to_port     = 0
