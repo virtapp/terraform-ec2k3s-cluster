@@ -7,9 +7,9 @@
 🎯  Key Features
 ```
 ✅ Launch EC2 Instances
-✅ Install Dependencies
-✅ Prepare Kubernetes Cluster
-✅ Post-Configuration
+✅ Install K3S Binary ( Kubernetes )
+✅ Prepare Cluster Configuration
+✅ Deploy Helm Charts 
 ```
 
 🚀 
