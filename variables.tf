@@ -35,6 +35,10 @@ variable "ssh_allowed_cidr" {
   default = "0.0.0.0/0"
 }
 
+variable "https_allowed_cidr" {
+  default = "0.0.0.0/0"
+}
+
 variable "security_group_name" {
   default = "k3s-cluster-sg"
 }
