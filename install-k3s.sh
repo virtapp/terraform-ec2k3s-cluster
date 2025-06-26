@@ -31,3 +31,20 @@ else
     curl -sfL https://get.k3s.io | K3S_URL="https://$MASTER_IP:6443" K3S_TOKEN="$TOKEN" sh -
   fi
 fi
+
+if [ "$NODE_INDEX" -eq 0 ]; then
+  echo "[+] Installing Helm if needed..."
+  if ! command -v helm &> /dev/null; then
+    curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+  fi
+
+  echo "[+] Installing NGINX Ingress Controller"
+  helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+  helm repo update
+  helm install ingress-nginx ingress-nginx/ingress-nginx \
+    --namespace ingress-nginx \
+    --create-namespace \
+    --set controller.publishService.enabled=true
+
+  echo "[+] Longhorn and NGINX Ingress installed. Use 'kubectl get pods -A' to check readiness."
+fi
