@@ -25,7 +25,7 @@ else
 
   if [ "$NODE_INDEX" -lt "$MASTER_COUNT" ]; then
     echo "[+] Joining as additional master"
-    curl -sfL https://get.k3s.io | K3S_URL="https://$MASTER_IP:6443" K3S_TOKEN="$TOKEN" INSTALL_K3S_EXEC="server" sh -
+    curl -sfL https://get.k3s.io | K3S_URL="https://$MASTER_IP:6443" K3S_TOKEN="$TOKEN" INSTALL_K3S_EXEC="server --disable local-storage" sh -
   else
     echo "[+] Joining as worker"
     curl -sfL https://get.k3s.io | K3S_URL="https://$MASTER_IP:6443" K3S_TOKEN="$TOKEN" sh -
