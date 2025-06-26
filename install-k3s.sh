@@ -1,3 +1,4 @@
+
 #!/bin/bash
 set -e
 
@@ -8,7 +9,6 @@ MASTER_COUNT=$3
 if [ "$NODE_INDEX" -eq 0 ]; then
   echo "[+] Installing first master (cluster-init)"
   curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --cluster-init --write-kubeconfig-mode 644 --disable local-storage --disable traefik" sh -
-  
 else
   echo "[+] Waiting for token from master..."
   MAX_RETRIES=20
@@ -62,4 +62,3 @@ if [ "$NODE_INDEX" -eq 0 ]; then
 
   echo "[+] NGINX Ingress installed. Use 'kubectl get pods -A' to check readiness."
 fi
-
