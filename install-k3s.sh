@@ -8,6 +8,7 @@ MASTER_COUNT=$3
 if [ "$NODE_INDEX" -eq 0 ]; then
   echo "[+] Installing first master (cluster-init)"
   curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --cluster-init --tls-san --write-kubeconfig-mode 644 --disable local-storage --disable traefik" sh -
+  
 else
   echo "[+] Waiting for token from master..."
   MAX_RETRIES=20
@@ -25,7 +26,7 @@ else
 
   if [ "$NODE_INDEX" -lt "$MASTER_COUNT" ]; then
     echo "[+] Joining as additional master"
-    curl -sfL https://get.k3s.io | K3S_URL="https://$MASTER_IP:6443" K3S_TOKEN="$TOKEN" INSTALL_K3S_EXEC="server --cluster-init --tls-san --disable local-storage --disable traefik" sh -
+    curl -sfL https://get.k3s.io | K3S_URL="https://$MASTER_IP:6443" K3S_TOKEN="$TOKEN" INSTALL_K3S_EXEC="server --tls-san $MASTER_IP --disable local-storage --disable traefik" sh -
   else
     echo "[+] Joining as worker"
     curl -sfL https://get.k3s.io | K3S_URL="https://$MASTER_IP:6443" K3S_TOKEN="$TOKEN" sh -
