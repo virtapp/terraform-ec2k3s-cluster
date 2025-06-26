@@ -38,6 +38,19 @@ if [ "$NODE_INDEX" -eq 0 ]; then
     curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
   fi
 
+  echo "[+] Waiting for K3s API to become available..."
+  export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+  for i in {1..30}; do
+    kubectl get nodes && break
+    echo "Waiting for API... ($i/30)"
+    sleep 5
+  done
+
+  if ! kubectl get nodes; then
+    echo "K3s API did not become ready in time"
+    exit 1
+  fi
   echo "[+] Installing NGINX Ingress Controller"
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
   helm repo update
@@ -46,5 +59,6 @@ if [ "$NODE_INDEX" -eq 0 ]; then
     --create-namespace \
     --set controller.publishService.enabled=true
 
-  echo "[+] Longhorn and NGINX Ingress installed. Use 'kubectl get pods -A' to check readiness."
+  echo "[+] NGINX Ingress installed. Use 'kubectl get pods -A' to check readiness."
 fi
+
